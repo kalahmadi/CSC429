@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -6,6 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+
 
 /**
  * SecurityGUI serves as the primary interface for the CSC 429 Computer Security Project.
@@ -52,9 +58,9 @@ public class SecurityGUI {
         ciphertextArea = new JTextArea(10, 60);
         
         // TODO: Replace with actual algorithm description
-        algorithmDescriptionLabel = new JLabel("Place your algorithm description and key requirement here.");
+        algorithmDescriptionLabel = new JLabel("Provide any size of plaintext ");
         // TODO: Replace with actual algorithm name
-        algorithmComboBox = new JComboBox<>(new String[]{"Replace With Your Algorithm Title Name"}); 
+        algorithmComboBox = new JComboBox<>(new String[]{"SHA-1"}); 
         
         keyPanel = new JPanel();
         openFileButton = new JButton("Open File");
@@ -121,6 +127,35 @@ public class SecurityGUI {
     
     
     //TODO: implement your algorithm function here:
+   private String HashSHA1(String input) {
+        try {
+            MessageDigest sha1Digest = MessageDigest.getInstance("SHA-1");
+            byte[] inputBytes = input.getBytes();
+            byte[] sha1HashBytes = sha1Digest.digest(inputBytes);
+
+            StringBuilder hexStringBuilder = new StringBuilder();
+            for (byte b : sha1HashBytes) {
+                hexStringBuilder.append(String.format("%02x", b));
+            }
+
+            return hexStringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -138,7 +173,12 @@ public class SecurityGUI {
 
         JButton hashButton = new JButton("Hash");
         // TODO: Replace placeholder action listener with actual hashing function
-        hashButton.addActionListener(e -> ciphertextArea.setText("Hashed text would be here.")); // Placeholder function
+        hashButton.addActionListener(e -> {
+        	  String plaintext = plaintextArea.getText();
+        	  String cipher=HashSHA1(plaintext);
+        	  ciphertextArea.setText(cipher);
+        	
+        }); // Placeholder function
 
         JButton hmacButton = new JButton("HMAC");
         // TODO: Replace placeholder action listener with actual HMAC function
